@@ -1,3 +1,5 @@
+APP CashControl es una aplicación orientado y diseñado para ayudar a las personas a administrar y controlar eficazmente sus finanzas personales.
+
 # CashControl
 1. Campos Rangel Sergio Leonardo
 2. Montiel Ramirez Hector
