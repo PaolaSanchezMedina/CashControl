@@ -14,11 +14,11 @@ const HomeScreen = () => {
                     textAlign: "center",
                     marginTop: "20%"
                 }}
-            >CashControl</Text>
+            >HomeScreen</Text>
             <TouchableOpacity
-            onPress={() => navigation.navigate("Sesion")}
+            onPress={() => navigation.navigate("Home")}
                 style={{
-                    backgroundColor: "red",
+                    backgroundColor: "black",
                     padding: 10,
                     marginTop: "20%",
                     width: "50%",
@@ -32,7 +32,7 @@ const HomeScreen = () => {
                         textAlign: "center",
                         color: "white"
                     }}
-                >Go to Stack Screens
+                >Botón de ejemplo
                 </Text>
             </TouchableOpacity>
         </View>
