@@ -1,0 +1,930 @@
+openapi: 3.0.3
+info:
+  title: Servicio para CashControl
+  description: Servicio para administración de solicitudes de CashControl
+  contact:
+    name: Campos Rangel Sergio Leonardo
+    email: l19141127@queretaro.tecnm.mx
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: users
+    description: Users' operations
+  - name: transactions
+    description: Transactions' operations
+  - name: categories
+    description: Categories' operations
+  - name: summary
+    description: Summary' operations
+  - name: budgets
+    description: Budgets' operations
+  - name: goals
+    description: Goals' operations
+  - name: reminders
+    description: Reminders' operations
+  - name: reports
+    description: Reports' operations
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      description: User Creation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '201':
+          description: Successfully created
+        '500':
+          description: Error creating the user
+
+    get:
+      tags:
+        - users
+      description: Get all users
+      responses:
+        '200':
+          description: Got all users
+        '500':
+          description: Error reaching users
+
+  /users/{userID}:
+    get:
+      tags:
+        - users
+      description: Get user by ID
+      parameters:
+        - name: userID
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: User retrieved
+        '400':
+          description: User not found
+        '500':
+          description: Error obtaining user
+
+    put:
+      tags:
+        - users
+      description: Update user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to update
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          description: User updated
+        '400':
+          description: User not found
+        '500':
+          description: Error trying to update user
+
+    delete:
+      tags:
+        - users
+      description: Delete user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to delete
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: User successfully deleted
+        '400':
+          description: User not found
+        '500':
+          description: Error trying to delete user
+
+  /transactions:
+    post:
+      tags:
+        - transactions
+      description: Transaction Creation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transaction'
+      responses:
+        '201':
+          description: Successfully created
+        '500':
+          description: Error creating the transaction
+
+  /transactions/{transactionID}:
+    get:
+      tags:
+        - transactions
+      description: Get a specific transaction
+      parameters:
+        - name: transactionID
+          in: path
+          description: Transaction ID to retrieve
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Transaction successfully requested
+        '400':
+          description: Transaction not found
+        '500':
+          description: Error trying to search for the transaction
+
+    put:
+      tags:
+        - transactions
+      description: Update a transaction
+      parameters:
+        - name: transactionID
+          in: path
+          description: Transaction ID to update
+          required: true
+          schema:
+            type: integer
+            example: 1235
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transaction'
+      responses:
+        '200':
+          description: Transaction successfully updated
+        '400':
+          description: Transaction not found
+        '500':
+          description: Error trying to update the transaction
+
+    delete:
+      tags:
+        - transactions
+      description: Delete a transaction
+      parameters:
+        - name: transactionID
+          in: path
+          description: Transaction ID to delete
+          required: true
+          schema:
+            type: integer
+            example: 1235
+      responses:
+        '200':
+          description: Transaction successfully deleted
+        '400':
+          description: Transaction not found
+        '500':
+          description: Error trying to delete the transaction
+
+  /categories:
+    get:
+      tags:
+        - categories
+      description: Get all categories
+      responses:
+        '200':
+          description: Categories successfully retrieved
+        '500':
+          description: Error trying to get categories
+
+    post:
+      tags:
+        - categories
+      description: Post a category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/category'
+      responses:
+        '201':
+          description: Category successfully created
+        '500':
+          description: Error creating the category
+
+  /categories/{categoryID}:
+    get:
+      tags:
+        - categories
+      description: Get a specific category
+      parameters:
+        - name: categoryID
+          in: path
+          description: Category ID to retrieve
+          required: true
+          schema:
+            type: string
+            example: 'S10'
+      responses:
+        '200':
+          description: Category successfully requested
+        '400':
+          description: Category not found
+        '500':
+          description: Error trying to search the category
+
+    put:
+      tags:
+        - categories
+      description: Update a category
+      parameters:
+        - name: categoryID
+          in: path
+          description: Category ID to update
+          required: true
+          schema:
+            type: string
+            example: 'S10'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/category'
+      responses:
+        '200':
+          description: Category successfully updated
+        '400':
+          description: Category not found
+        '500':
+          description: Error trying to update the category
+
+    delete:
+      tags:
+        - categories
+      description: Delete a category
+      parameters:
+        - name: categoryID
+          in: path
+          description: Category ID to delete
+          required: true
+          schema:
+            type: string
+            example: 'S10'
+      responses:
+        '200':
+          description: Category successfully deleted
+        '400':
+          description: Category not found
+        '500':
+          description: Error trying to delete the category
+
+  /summary/{summaryID}:
+    get:
+      tags:
+        - summary
+      description: Get a specific financial summary
+      parameters:
+        - name: summaryID
+          in: path
+          description: Summary ID to retrieve
+          required: true
+          schema:
+            type: string
+            example: 'sum-10'
+      responses:
+        '200':
+          description: Financial summary successfully requested
+        '400':
+          description: Summary not found
+        '500':
+          description: Error trying to search for the financial summary
+
+  /summary/user/{userID}:
+    get:
+      tags:
+        - summary
+      description: Get financial summary of a specific user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to retrieve the financial summary
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: Financial summary successfully retrieved
+        '400':
+          description: Financial summary not found
+        '500':
+          description: Error trying to get the financial summary
+
+  /summary:
+    post:
+      tags:
+        - summary
+      description: Create a new financial summary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/summary'
+      responses:
+        '201':
+          description: Financial summary successfully created
+        '500':
+          description: Error creating the financial summary
+
+  /budgets:
+    post:
+      tags:
+        - budgets
+      description: Create a new budget
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/budget'
+      responses:
+        '201':
+          description: Budget successfully created
+        '500':
+          description: Error creating the budget
+  
+  /budgets/user/{userID}:
+    get:
+      tags:
+        - budgets
+      description: Get a list of budgets for a specific user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to retrieve the budgets
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: Budgets successfully retrieved
+        '400':
+          description: Budgets not found
+        '500':
+          description: Error trying to get the budgets
+
+  /budgets/{budgetID}:
+    get:
+      tags:
+        - budgets
+      description: Get specific budget details
+      parameters:
+        - name: budgetID
+          in: path
+          description: Budget ID to retrieve
+          required: true
+          schema:
+            type: string
+            example: 'budget-1002-10'
+      responses:
+        '200':
+          description: Budget details successfully requested
+        '400':
+          description: Budget not found
+        '500':
+          description: Error trying to search for the budget
+  
+    put:
+      tags:
+        - budgets
+      description: Update a budget
+      parameters:
+        - name: budgetID
+          in: path
+          description: Budget ID to update
+          required: true
+          schema:
+            type: string
+            example: 'budget-1002-10'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/budget'
+      responses:
+        '200':
+          description: Budget successfully updated
+        '400':
+          description: Budget not found
+        '500':
+          description: Error trying to update the budget
+    
+    delete:
+      tags:
+        - budgets
+      description: Delete a budget
+      parameters:
+        - name: budgetID
+          in: path
+          description: Budget ID to delete
+          required: true
+          schema:
+            type: string
+            example: 'budget-1002-10'
+      responses:
+        '200':
+          description: Budget successfully deleted
+        '400':
+          description: Budget not found
+        '500':
+          description: Error trying to delete the budget
+
+  /goals/user/{userID}:
+    get:
+      tags:
+        - goals
+      description: Get a list of goals for a specific user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to retrieve the goals
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: Goals successfully retrieved
+        '400':
+          description: Goals not found
+        '500':
+          description: Error trying to get the goals
+
+  /goals:
+    post:
+      tags:
+        - goals
+      description: Create a new goal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/goals'
+      responses:
+        '201':
+          description: Goal successfully created
+        '500':
+          description: Error creating the goal
+
+  /goals/{goalID}:
+    get:
+      tags:
+        - goals
+      description: Get specific goal details
+      parameters:
+        - name: goalID
+          in: path
+          description: Goal ID to retrieve
+          required: true
+          schema:
+            type: string
+            example: 'goal-10-2342'
+      responses:
+        '200':
+          description: Goal details successfully requested
+        '400':
+          description: Goal not found
+        '500':
+          description: Error trying to search for the goal
+  
+    put:
+      tags:
+        - goals
+      description: Update a goal
+      parameters:
+        - name: goalID
+          in: path
+          description: Goal ID to update
+          required: true
+          schema:
+            type: string
+            example: 'goal-10-2342'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/goals'
+      responses:
+        '200':
+          description: Goal successfully updated
+        '400':
+          description: Goal not found
+        '500':
+          description: Error trying to update the goal
+  
+    delete:
+      tags:
+        - goals
+      description: Delete a goal
+      parameters:
+        - name: goalID
+          in: path
+          description: Goal ID to delete
+          required: true
+          schema:
+            type: string
+            example: 'goal-10-2342'
+      responses:
+        '200':
+          description: Goal successfully deleted
+        '400':
+          description: Goal not found
+        '500':
+          description: Error trying to delete the goal
+
+  /reminders/user/{userID}:
+    get:
+      tags:
+        - reminders
+      description: Get a list of reminders for a specific user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to retrieve the reminders
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: Reminders successfully retrieved
+        '400':
+          description: Reminders not found
+        '500':
+          description: Error trying to get the reminders
+
+  /reminders:
+    post:
+      tags:
+        - reminders
+      description: Create a new reminder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reminder'
+      responses:
+        '201':
+          description: Reminder successfully created
+        '500':
+          description: Error creating the reminder
+
+  /reminders/{reminderID}:
+    get:
+      tags:
+        - reminders
+      description: Get specific reminder details
+      parameters:
+        - name: reminderID
+          in: path
+          description: Reminder ID to retrieve
+          required: true
+          schema:
+            type: string
+            example: 'goal-10-10'
+      responses:
+        '200':
+          description: Reminder details successfully requested
+        '400':
+          description: Reminder not found
+        '500':
+          description: Error trying to search for the reminder
+  
+    put:
+      tags:
+        - reminders
+      description: Update a reminder
+      parameters:
+        - name: reminderID
+          in: path
+          description: Reminder ID to update
+          required: true
+          schema:
+            type: string
+            example: 'goal-10-10'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reminder'
+      responses:
+        '200':
+          description: Reminder successfully updated
+        '400':
+          description: Reminder not found
+        '500':
+          description: Error trying to update the reminder
+          
+    delete:
+      tags:
+        - reminders
+      description: Delete a reminder
+      parameters:
+        - name: reminderID
+          in: path
+          description: Reminder ID to delete
+          required: true
+          schema:
+            type: string
+            example: 'goal-10-10'
+      responses:
+        '200':
+          description: Reminder successfully deleted
+        '400':
+          description: Reminder not found
+        '500':
+          description: Error trying to delete the reminder
+
+  /reports/user/{userID}:
+    get:
+      tags:
+        - reports
+      description: Get a list of reports for a specific user
+      parameters:
+        - name: userID
+          in: path
+          description: User ID to retrieve the reports
+          required: true
+          schema:
+            type: string
+            example: 'SLHM1912'
+      responses:
+        '200':
+          description: Reports successfully retrieved
+        '400':
+          description: Reports not found
+        '500':
+          description: Error trying to get the reports
+
+  /reports:
+    post:
+      tags:
+        - reports
+      description: Create a new report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/report'
+      responses:
+        '201':
+          description: Report successfully created
+        '500':
+          description: Error creating the report
+
+  /reports/{reportID}:
+    get:
+      tags:
+        - reports
+      description: Get specific report details
+      parameters:
+        - name: reportID
+          in: path
+          description: Report ID to retrieve
+          required: true
+          schema:
+            type: string
+            example: 'rep-10-123'
+      responses:
+        '200':
+          description: Report details successfully requested
+        '400':
+          description: Report not found
+        '500':
+          description: Error trying to search for the report
+          
+    put:
+      tags:
+        - reports
+      description: Update a report
+      parameters:
+        - name: reportID
+          in: path
+          description: Report ID to update
+          required: true
+          schema:
+            type: string
+            example: 'rep-10-123'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/report'
+      responses:
+        '200':
+          description: Report successfully updated
+        '400':
+          description: Report not found
+        '500':
+          description: Error trying to update the report
+  
+    delete:
+      tags:
+        - reports
+      description: Delete a report
+      parameters:
+        - name: reportID
+          in: path
+          description: Report ID to delete
+          required: true
+          schema:
+            type: string
+            example: 'rep-10-123'
+      responses:
+        '200':
+          description: Report successfully deleted
+        '400':
+          description: Report not found
+        '500':
+          description: Error trying to delete the report
+
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        userID:
+          type: string
+          example: 'SLHM1912'
+          readOnly: true
+        username:
+          type: string
+          example: 'Hector Montiel'
+        email:
+          type: string
+          example: 'slhm@example.com'
+        password:
+          type: string
+          format: password
+        registrationDate:
+          type: string
+          example: '2023-08-31'
+
+    transaction:
+      type: object
+      properties:
+        transactionID:
+          type: integer
+          example: 1234
+        userID:
+          type: string
+          example: 'SLHM1912'
+        transactionDate:
+          type: string
+          example: '2023-08-31'
+        transactionType:
+          type: string
+          example: 'Income'
+        amount:
+          type: number
+          example: 20000
+        description:
+          type: string
+          example: 'Transaction description'
+        category:
+          type: string
+          example: 'Expenses'
+        paymentMethod:
+          type: string
+          example: 'Cash'
+
+    category:
+      type: object
+      properties:
+        categoryID:
+          type: string
+          example: 'S10'
+        categoryName:
+          type: string
+          example: 'Unnecessary Expenses'
+        categoryIcon:
+          type: string
+
+    summary:
+      type: object
+      properties:
+        summaryID:
+          type: string
+          example: 'sum-10'
+        userID:
+          type: string
+          example: 'SLHM1912'
+        totalBalance:
+          type: number
+          example: 1001.12
+        totalExpenses:
+          type: number
+          example: 500.12
+        summaryDate:
+          type: string
+          example: '2023-08-31'
+
+    budget:
+      type: object
+      properties:
+        budgetID:
+          type: string
+          example: 'budget-1002-10'
+        userID:
+          type: string
+          example: 'SLHM1912'
+        category:
+          type: string
+          example: 'Unnecessary Expenses'
+        budgetAmount:
+          type: number
+          example: 10078.37
+        spentAmount:
+          type: number
+          example: 100.34
+        startDate:
+          type: string
+          example: '2023-08-01'
+        endDate:
+          type: string
+          example: '2023-08-31'
+
+    goals:
+      type: object
+      properties:
+        goalID:
+          type: string
+          example: 'goal-10-2342'
+        userID:
+          type: string
+          example: 'SLHM1912'
+        goalName:
+          type: string
+          example: 'Vacation'
+        goalAmount:
+          type: number
+          example: 5000
+        savedAmount:
+          type: number
+          example: 2000
+
+    reminder:
+      type: object
+      properties:
+        reminderID:
+          type: string
+          example: 'rem-10-10'
+        userID:
+          type: string
+          example: 'SLHM1912'
+        reminderDate:
+          type: string
+          example: '2023-08-31'
+        description:
+          type: string
+          example: 'Meeting'
+        location:
+          type: string
+          example: 'Coffee Shop'
+
+    report:
+      type: object
+      properties:
+        reportID:
+          type: string
+          example: 'rep-10-123'
+        userID:
+          type: string
+          example: 'SLHM1912'
+        reportDate:
+          type: string
+          example: '2023-08-31'
+        reportType:
+          type: string
+          example: 'Monthly'
