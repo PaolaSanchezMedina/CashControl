@@ -2,9 +2,11 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./HomeScreen";
 import SettingsScreen from "./SettingsScreen";
+import TopTabNvigator from "../FinanceOperations/TopTabNavigator";
 
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,9 +14,15 @@ const BottomTabNavigator = () => {
     return (
       <Tab.Navigator
         initialRouteName="Home"
-        tabBarOptions={{
-          activeTintColor: 'red',
-          inactiveTintColor: 'gray',
+        screenOptions={{
+          "tabBarActiveTintColor": "red",
+          "tabBarInactiveTintColor": "gray",
+          "tabBarStyle": [
+            {
+              "display": "flex"
+            },
+            null
+          ]
         }}
       >
         <Tab.Screen
@@ -24,6 +32,15 @@ const BottomTabNavigator = () => {
             headerShown: false,
             tabBarLabel: 'Home',
             tabBarIcon: ({color, size}) => (<AntDesign name="home" size={24} color="black" />),
+          }}
+        />
+        <Tab.Screen
+          name="Top"
+          component={TopTabNvigator}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Mis finanzas',
+            tabBarIcon: ({color, size}) => (<Feather name="user-check" size={24} color="black" />),
           }}
         />
         <Tab.Screen

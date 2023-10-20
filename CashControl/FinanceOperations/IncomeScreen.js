@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const HomeScreen = () => {
+const IncomeScreen = () => {
     
     const navigation = useNavigation();
 
@@ -14,7 +14,7 @@ const HomeScreen = () => {
                     textAlign: "center",
                     marginTop: "20%"
                 }}
-            >HomeScreen</Text>
+            >Pantalla de ingresos</Text>
             <TouchableOpacity
             onPress={() => navigation.navigate("Home")}
                 style={{
@@ -39,4 +39,4 @@ const HomeScreen = () => {
     );
 }
 
-export default HomeScreen;
+export default IncomeScreen;
