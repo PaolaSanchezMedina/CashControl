@@ -7,42 +7,77 @@ const HomeScreen = () => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
-            <View style={styles.container1}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("Home")}
-                    style={{
-                        backgroundColor: "black",
-                        padding: 10,
-                        borderRadius: 10,
-                    }}
-                >
-                    <Text
+        <View style={styles.generalContainer}>
+            <View style={styles.container}>
+                <View style={styles.subContainer}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Home")}
                         style={{
-                            fontSize: 25,
-                            color: "white"
+                            backgroundColor: 'black',
+                            padding: 10,
+                            borderRadius: 10,
+                            height: 100,
+                            width: 185*2,
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
-                    >Transacciones
-                    </Text>
-                </TouchableOpacity>
+                    >
+                        <Text
+                            style={{
+                                fontSize: 25,
+                                color: "white"
+                            }}
+                        >Transacciones
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View style={styles.container2}>
-            <TouchableOpacity
-                    onPress={() => navigation.navigate("Home")}
-                    style={{
-                        backgroundColor: "black",
-                        padding: 10,
-                        borderRadius: 10,
-                    }}
-                >
-                    <Text
+
+            <View style={styles.container}>
+                <View style={styles.subContainer}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Home")}
                         style={{
-                            fontSize: 25,
-                            color: "white"
+                            backgroundColor: "black",
+                            padding: 10,
+                            borderRadius: 10,
+                            height: 100,
+                            width: 185,
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
-                    >Presupuesto
-                    </Text>
-                </TouchableOpacity>
+                    >
+                        <Text
+                            style={{
+                                fontSize: 25,
+                                color: "white"
+                            }}
+                        >Metas
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.subContainer}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Home")}
+                        style={{
+                            backgroundColor: "black",
+                            padding: 10,
+                            borderRadius: 10,
+                            height: 100,
+                            width: 185,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 25,
+                                color: "white"
+                            }}
+                        >Establecer recordatorio
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
 
@@ -52,17 +87,18 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+    generalContainer: {
+        flex: 2,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        paddingVertical: 250,
+    },
     container: {
         alignItems: 'center',
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
     },
-    container1: {
-        alignItems: 'center',
-        flex: 1,
-    },
-    container2: {
+    subContainer: {
         alignItems: 'center',
         flex: 1,
     }

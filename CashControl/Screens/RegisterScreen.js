@@ -13,9 +13,9 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleLogin = () => {
+    const handleRegister = () => {
         //PAGINA HOME
-        navigation.navigate('Home');
+        navigation.navigate('Tabs');
         // Lógica de autenticación
         console.log('Usuario:', username);
         console.log('Contraseña:', password);
@@ -70,7 +70,7 @@ const RegisterScreen = () => {
             </View>
 
             <TouchableOpacity
-                onPress={handleLogin}
+                onPress={handleRegister}
                 style={{
                     backgroundColor: "blue",
                     padding: 10,

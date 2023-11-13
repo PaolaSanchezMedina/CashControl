@@ -1,49 +1,56 @@
-import React from "react";
-import { TextInput, View, Button, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import React, { useState } from "react";
+import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { Ionicons } from '@expo/vector-icons';
+import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
+import { collection, query, where, getDocs, doc, getFirestore } from '@firebase/firestore';
+import firebaseApp from '../firebase/firebaseConfig'; // Ajusta la ruta según tu estructura de carpetas
+
+const db = getFirestore(firebaseApp);
 
 const LoginScreen = () => {
     const navigation = useNavigation();
+    const auth = getAuth();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleLogin = () => {
-        navigation.navigate('Tabs');
-        // Lógica de autenticación
-        console.log('Usuario:', username);
-        console.log('Contraseña:', password);
-        // Lógica de autenticación
-    };
+    const handleLogin = async () => {
+        try {
+            // Consultar la base de datos para verificar las credenciales
+            const usersCollection = collection(db, 'usuarios');
+            const q = query(usersCollection, where('username', '==', username), where('password', '==', password));
+            const querySnapshot = await getDocs(q);
 
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible);
+            if (!querySnapshot.empty) {
+                // Usuario autenticado correctamente
+                const user = querySnapshot.docs[0].data();
+                console.log('Usuario autenticado:', username);
+                navigation.navigate('Tabs'); // Navegar a la pantalla después de la autenticación
+            } else {
+                // Credenciales incorrectas
+                console.log('Credenciales incorrectas');
+            }
+        } catch (error) {
+            console.error('Error de autenticación:', error.message);
+            // Manejar el error, mostrar mensaje al usuario, etc.
+        }
     };
 
     return (
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
-                placeholder="Usuario"
+                placeholder="Nombre de Usuario"
                 onChangeText={(text) => setUsername(text)}
                 value={username}
             />
-            <View style={styles.passwordContainer}>
-                <TextInput
-                    style={styles.container}
-                    placeholder="Contraseña"
-                    secureTextEntry={!isPasswordVisible}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-
-                />
-                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-                    <Ionicons name={isPasswordVisible ? 'eye' : 'eye-off'} size={24} color="gray" />
-                </TouchableOpacity>
-            </View>
+            <TextInput
+                style={styles.input}
+                placeholder="Contraseña"
+                secureTextEntry
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+            />
             <TouchableOpacity
                 onPress={handleLogin}
                 style={{
@@ -81,16 +88,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
     },
-
-    passwordContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '80%', // Establece el ancho del contenedor para asegurar que el ojo aparezca al lado del input
-        marginVertical: 10,
-        padding: 10,
-        borderWidth: 1,
-        borderRadius: 5,
-      },
 });
 
 export default LoginScreen;
