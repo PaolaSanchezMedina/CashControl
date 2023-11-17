@@ -1,19 +1,28 @@
 import React, { useState } from "react";
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { collection, query, where, getDocs, doc, getFirestore } from '@firebase/firestore';
 import firebaseApp from '../firebase/firebaseConfig'; // Ajusta la ruta según tu estructura de carpetas
+import Modal from 'react-native-modal'; // Importa la biblioteca de modales
 
 const db = getFirestore(firebaseApp);
 
 const LoginScreen = () => {
     const navigation = useNavigation();
-    const auth = getAuth();
 
+    // Estados para almacenar el nombre de usuario, contraseña y control del modal
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
+    // Función para mostrar el modal con un mensaje específico
+    const toggleModal = (message) => {
+        setModalMessage(message);
+        setIsModalVisible(!isModalVisible);
+    };
+
+    // Función para manejar el inicio de sesión
     const handleLogin = async () => {
         try {
             // Consultar la base de datos para verificar las credenciales
@@ -28,7 +37,7 @@ const LoginScreen = () => {
                 navigation.navigate('Tabs'); // Navegar a la pantalla después de la autenticación
             } else {
                 // Credenciales incorrectas
-                console.log('Credenciales incorrectas');
+                toggleModal('Los datos no coinciden');
             }
         } catch (error) {
             console.error('Error de autenticación:', error.message);
@@ -38,6 +47,7 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
+            {/* Inputs para el nombre de usuario y contraseña */}
             <TextInput
                 style={styles.input}
                 placeholder="Nombre de Usuario"
@@ -51,6 +61,7 @@ const LoginScreen = () => {
                 onChangeText={(text) => setPassword(text)}
                 value={password}
             />
+            {/* Botón para iniciar sesión */}
             <TouchableOpacity
                 onPress={handleLogin}
                 style={{
@@ -71,10 +82,24 @@ const LoginScreen = () => {
                 >Iniciar sesión
                 </Text>
             </TouchableOpacity>
+
+            {/* Modal para mostrar mensajes al usuario */}
+            <Modal isVisible={isModalVisible} onBackdropPress={() => toggleModal('')}
+                animationIn={"fadeIn"}
+                animationOut={"fadeOut"}>
+                <View style={styles.modalContainer}>
+                    <Text style={styles.modalText}>{modalMessage}</Text>
+                    {/* Botón dentro del modal */}
+                    <TouchableOpacity onPress={() => toggleModal('')} style={styles.modalButton}>
+                        <Text style={styles.modalButtonText}>OK</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </View>
     );
 };
 
+// Estilos CSS para los elementos del componente
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -87,6 +112,26 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderRadius: 5,
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 20,
+    },
+    modalButton: {
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+    },
+    modalButtonText: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
     },
 });
 

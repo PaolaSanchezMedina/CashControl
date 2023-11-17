@@ -4,8 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 
 const SettingsScreen = () => {
     const navigation = useNavigation();
+
+    // Renderiza la pantalla de configuración
     return (
         <View>
+            {/* Encabezado de la pantalla */}
             <Text
                 style={{
                     fontSize: 30,
@@ -13,9 +16,10 @@ const SettingsScreen = () => {
                     marginTop: "20%"
                 }}
             >Settings Screen</Text>
+
+            {/* Botón para cerrar sesión */}
             <TouchableOpacity
-                //CAMBIAR LA LÓGICA PARA CERRAR SESIÓN
-                onPress={() => navigation.navigate("Start")}
+                onPress={() => navigation.navigate("Start")} // Redirige a la pantalla de inicio al presionar este botón (debe ajustarse para cerrar sesión)
                 style={{
                     backgroundColor: "black",
                     padding: 10,

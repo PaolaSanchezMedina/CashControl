@@ -3,13 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
-
+    // Obtiene el objeto de navegación
     const navigation = useNavigation();
 
     return (
         <View style={styles.generalContainer}>
+            {/* Sección principal */}
             <View style={styles.container}>
+                {/* Subcontenedor para el primer elemento */}
                 <View style={styles.subContainer}>
+                    {/* Botón de Transacciones */}
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Home")}
                         style={{
@@ -17,7 +20,7 @@ const HomeScreen = () => {
                             padding: 10,
                             borderRadius: 10,
                             height: 100,
-                            width: 185*2,
+                            width: 185 * 2,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}
@@ -27,14 +30,18 @@ const HomeScreen = () => {
                                 fontSize: 25,
                                 color: "white"
                             }}
-                        >Transacciones
+                        >
+                            Transacciones
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
+            {/* Sección secundaria */}
             <View style={styles.container}>
+                {/* Subcontenedor para el segundo elemento */}
                 <View style={styles.subContainer}>
+                    {/* Botón de Metas */}
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Home")}
                         style={{
@@ -52,11 +59,14 @@ const HomeScreen = () => {
                                 fontSize: 25,
                                 color: "white"
                             }}
-                        >Metas
+                        >
+                            Metas
                         </Text>
                     </TouchableOpacity>
                 </View>
+                {/* Subcontenedor para el tercer elemento */}
                 <View style={styles.subContainer}>
+                    {/* Botón de Establecer recordatorio */}
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Home")}
                         style={{
@@ -74,18 +84,19 @@ const HomeScreen = () => {
                                 fontSize: 25,
                                 color: "white"
                             }}
-                        >Establecer recordatorio
+                        >
+                            Establecer recordatorio
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </View>
-
     );
 }
 
 export default HomeScreen;
 
+// Estilos para los componentes
 const styles = StyleSheet.create({
     generalContainer: {
         flex: 2,
