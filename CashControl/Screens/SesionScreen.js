@@ -1,15 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native"; // Importa el hook useNavigation para la navegación
 
 const SesionScreen = () => {
-    
-    const navigation = useNavigation();
+    const navigation = useNavigation(); // Obtiene la instancia de navegación
 
     return (
         <View style={{
         }}>
-            
+            {/* Título de la aplicación */}
             <Text
                 style={{
                     fontSize: 40,
@@ -17,8 +16,10 @@ const SesionScreen = () => {
                     marginTop: "20%"
                 }}
             >CashControl</Text>
+
+            {/* Botón para iniciar sesión */}
             <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
+                onPress={() => navigation.navigate("Login")} // Navega a la pantalla de inicio de sesión al presionar este botón
                 style={{
                     backgroundColor: "red",
                     padding: 10,

@@ -10,7 +10,9 @@ const StackScreen = () => {
                     textAlign: "center",
                     marginTop: "20%"
                 }}
-            >Stack Screen</Text>
+            >
+                Stack Screen
+            </Text>
         </View>
     );
 }
