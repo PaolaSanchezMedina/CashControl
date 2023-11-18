@@ -7,6 +7,8 @@ import TopTabNvigator from "../FinanceOperations/TopTabNavigator";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import AddTransactionScreen from "./TransactionHistoryScreen";
+import TransactionHistoryScreen from "./TransactionHistoryScreen";
 
 // Crea un objeto 'Tab' que utiliza createBottomTabNavigator() de React Navigation
 const Tab = createBottomTabNavigator();
@@ -48,7 +50,17 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (<Feather name="user-check" size={24} color="black" />),
         }}
       />
-      {/* Define la tercera pestaña ('Settings') con sus opciones */}
+      {/* Define la tercera pestaña ('Transacciones') con sus opciones */}
+      <Tab.Screen
+        name="Historial"
+        component={TransactionHistoryScreen} //Falta agregar el historial de finanzas
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Transacciones',
+          tabBarIcon: ({ color, size }) => (<Ionicons name="add" size={24} color={color} />),
+        }}
+      />
+      {/* Define la cuarta pestaña ('Settings') con sus opciones */}
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
