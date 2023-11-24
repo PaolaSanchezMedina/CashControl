@@ -1,27 +1,94 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// Define la dirección IP en una variable
+const ipAddress = "192.168.0.26";
 
 const IncomeModal = ({ isVisible, onClose, onSave }) => {
   const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState(""); 
+  const [description, setDescription] = useState("");
 
-  const handleSave = () => {
-    onSave({
-      amount: parseFloat(amount),
-      description: description,
-    });
+  const handleSave = async () => {
+    try {
+      // Obtener el ID del usuario guardado en AsyncStorage
+      const userId = await AsyncStorage.getItem("@userId");
 
-    setAmount("");
-    setDescription("");
-    onClose();
+      // Obtener la fecha actual
+      const currentDate = new Date();
+
+      const formattedDate = `${currentDate.getFullYear()}-${(
+        currentDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}-${currentDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")} ${currentDate
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${currentDate
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}:${currentDate
+        .getSeconds()
+        .toString()
+        .padStart(2, "0")}`;
+
+      const incomeData = {
+        userID: userId,
+        transactionDate: formattedDate,
+        transactionType: "Income",
+        amount: parseFloat(amount),
+        description: description,
+        category: "Sin categoría",
+        paymentMethod: "Son método",
+      };
+
+      // Crea la URL utilizando la variable para la dirección IP
+      const apiUrl = `http://${ipAddress}:3000/transactions`;
+      const response = await axios.post(apiUrl, incomeData);
+
+      console.log("Respuesta del servidor:", response.data);
+
+      // Cerrar el modal después de agregar la transacción
+      onClose();
+      showAlert(response.data); // Llama a la función showAlert con la respuesta del servidor
+    } catch (error) {
+      console.error("Error al agregar ingreso:", error);
+      // Manejar errores, mostrar mensajes de error, etc.
+    }
+  };
+
+  const showAlert = (data) => {
+    if (data === "Transacción creada exitosamente") {
+      Alert.alert(
+        "Transacción Exitosa",
+        "La transacción se creó exitosamente.",
+        [{ text: "OK", onPress: () => console.log("Alerta cerrada") }],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        "Error al crear la transacción",
+        "Hubo un error al crear la transacción.",
+        [{ text: "OK", onPress: () => console.log("Alerta cerrada") }],
+        { cancelable: false }
+      );
+    }
   };
 
   return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      transparent={true}
-    >
+    <Modal visible={isVisible} animationType="slide" transparent={true}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.title}>Agregar Ingreso</Text>
@@ -36,11 +103,15 @@ const IncomeModal = ({ isVisible, onClose, onSave }) => {
             style={styles.input}
             placeholder="Descripción"
             value={description}
-            onChangeText={(text) => setDescription(text)} 
+            onChangeText={(text) => setDescription(text)}
           />
           <View style={styles.buttonContainer}>
-            <Button title="Agregar" onPress={handleSave} />
-            <Button title="Cerrar" onPress={onClose} />
+            <TouchableOpacity onPress={handleSave} style={styles.button}>
+              <Text style={styles.buttonText}>Agregar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onClose} style={styles.button}>
+              <Text style={styles.buttonText}>Cerrar</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -78,6 +149,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
+  },
+  button: {
+    backgroundColor: "black",
+    padding: 10,
+    borderRadius: 5,
+    width: 100,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
   },
 });
 

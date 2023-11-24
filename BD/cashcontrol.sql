@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3306
--- Tiempo de generación: 05-11-2023 a las 20:53:01
--- Versión del servidor: 8.0.30
--- Versión de PHP: 8.1.10
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 24-11-2023 a las 04:32:41
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `categorias` (
-  `CategoryID` int NOT NULL,
+  `CategoryID` int(11) NOT NULL,
   `CategoryName` varchar(255) NOT NULL,
   `CategoryIcon` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -40,13 +40,13 @@ CREATE TABLE `categorias` (
 --
 
 CREATE TABLE `metasfinancieras` (
-  `GoalID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
+  `GoalID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
   `TipoMeta` varchar(255) DEFAULT NULL,
   `MontoMeta` decimal(10,2) DEFAULT NULL,
   `FechaVencimiento` timestamp NULL DEFAULT NULL,
   `Progreso` decimal(5,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -55,14 +55,14 @@ CREATE TABLE `metasfinancieras` (
 --
 
 CREATE TABLE `presupuestos` (
-  `BudgetID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
+  `BudgetID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
   `Categoria` varchar(255) DEFAULT NULL,
   `MontoPresupuestado` decimal(10,2) DEFAULT NULL,
   `MontoGastado` decimal(10,2) DEFAULT NULL,
   `StartDate` timestamp NULL DEFAULT NULL,
   `EndDate` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -71,12 +71,12 @@ CREATE TABLE `presupuestos` (
 --
 
 CREATE TABLE `recordatorios` (
-  `ReminderID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
+  `ReminderID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
   `ReminderDescription` varchar(255) DEFAULT NULL,
   `ReminderDateTime` timestamp NULL DEFAULT NULL,
   `ReminderStatus` enum('Pending','Completed','Dismissed') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -85,12 +85,12 @@ CREATE TABLE `recordatorios` (
 --
 
 CREATE TABLE `reporteyanalisis` (
-  `ReportID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
+  `ReportID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
   `TipoReporte` varchar(255) DEFAULT NULL,
-  `ReportData` text,
+  `ReportData` text DEFAULT NULL,
   `ReportDate` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -99,13 +99,13 @@ CREATE TABLE `reporteyanalisis` (
 --
 
 CREATE TABLE `resumengastos` (
-  `SummaryID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
+  `SummaryID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
   `TotalBalance` decimal(10,2) DEFAULT NULL,
   `TotalIncome` decimal(10,2) DEFAULT NULL,
   `TotalExpenses` decimal(10,2) DEFAULT NULL,
   `SummaryDate` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -114,15 +114,28 @@ CREATE TABLE `resumengastos` (
 --
 
 CREATE TABLE `transacciones` (
-  `TransactionID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
+  `TransactionID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
   `TransactionDate` timestamp NULL DEFAULT NULL,
   `TransactionType` enum('Income','Expense') DEFAULT NULL,
   `Amount` decimal(10,2) DEFAULT NULL,
   `Description` varchar(255) DEFAULT NULL,
   `Category` varchar(255) DEFAULT NULL,
   `PaymentMethod` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `transacciones`
+--
+
+INSERT INTO `transacciones` (`TransactionID`, `UserID`, `TransactionDate`, `TransactionType`, `Amount`, `Description`, `Category`, `PaymentMethod`) VALUES
+(1, 15, '2023-11-21 05:23:02', 'Income', 500.00, 'Nómina ', 'Sin categoría', 'Son método'),
+(2, 15, '2023-11-20 23:26:22', 'Income', 500.00, 'Nómina 2', 'Sin categoría', 'Son método'),
+(4, 15, '2023-11-20 23:30:32', 'Income', 500.00, 'Regalo de navidad', 'Sin categoría', 'Son método'),
+(11, 1, '2023-11-24 02:52:56', 'Expense', 5000.00, 'Renta', 'Sin categoría', 'Son método'),
+(12, 1, '2023-11-24 03:23:58', 'Income', 6000.00, 'Nómina ', 'Sin categoría', 'Son método'),
+(13, 1, '2023-11-24 03:26:31', 'Income', 50.00, 'Mesada', 'Sin categoría', 'Son método'),
+(14, 1, '2023-11-24 03:26:43', 'Income', 50.00, 'Mesada', 'Sin categoría', 'Son método');
 
 -- --------------------------------------------------------
 
@@ -131,12 +144,22 @@ CREATE TABLE `transacciones` (
 --
 
 CREATE TABLE `usuarios` (
-  `UserID` int NOT NULL,
+  `UserID` int(11) NOT NULL,
   `Username` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
   `Password` varchar(255) NOT NULL,
   `RegistrationDate` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`UserID`, `Username`, `Email`, `Password`, `RegistrationDate`) VALUES
+(1, 'adrian', 'l18141029@queretaro.tecnm.mx', '12345', NULL),
+(2, 'paola', 'l18141044@queretaro.tecnm.mx', '12345', NULL),
+(4, 'pablo', 'l18141045@queretaro.tecnm.mx', '12345', NULL),
+(15, 'hector', 'l18141046@queretaro.tecnm.mx', '12345', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -204,49 +227,49 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `CategoryID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `CategoryID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `metasfinancieras`
 --
 ALTER TABLE `metasfinancieras`
-  MODIFY `GoalID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `GoalID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `BudgetID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `BudgetID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `recordatorios`
 --
 ALTER TABLE `recordatorios`
-  MODIFY `ReminderID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `ReminderID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `reporteyanalisis`
 --
 ALTER TABLE `reporteyanalisis`
-  MODIFY `ReportID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `ReportID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `resumengastos`
 --
 ALTER TABLE `resumengastos`
-  MODIFY `SummaryID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `SummaryID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `transacciones`
 --
 ALTER TABLE `transacciones`
-  MODIFY `TransactionID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `TransactionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `UserID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restricciones para tablas volcadas
