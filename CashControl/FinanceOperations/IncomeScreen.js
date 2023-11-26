@@ -7,7 +7,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "192.168.100.138";
 
 const IncomeScreen = () => {
   const navigation = useNavigation();
@@ -46,7 +46,7 @@ const IncomeScreen = () => {
     async function fetchIncomeTransactions() {
       try {
         const userId = await AsyncStorage.getItem('@userId');
-        const response = await axios.get(`http://192.168.0.26:3000/transactions?type=Income&userId=${userId}`);
+        const response = await axios.get(`http://192.168.100.138:3000/transactions?type=Income&userId=${userId}`);
         setIncomeTransactions(response.data);
       } catch (error) {
         console.error("Error al obtener transacciones de ingresos:", error);

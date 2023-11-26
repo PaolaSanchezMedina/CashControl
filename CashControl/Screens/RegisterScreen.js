@@ -14,7 +14,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "192.168.100.138";
 
 const RegisterScreen = () => {
   const navigation = useNavigation(); // Obtiene la navegación actual

@@ -12,7 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "192.168.100.138";
 
 const ExpenseModal = ({ isVisible, onClose, onSave }) => {
   const [amount, setAmount] = useState("");
@@ -107,7 +107,7 @@ const ExpenseModal = ({ isVisible, onClose, onSave }) => {
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleSave} style={styles.button}>
-              <Text style={styles.buttonText}>Guardar</Text>
+              <Text style={styles.buttonText}>Agregar</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onClose} style={styles.button}>
               <Text style={styles.buttonText}>Cerrar</Text>
