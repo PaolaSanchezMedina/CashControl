@@ -19,6 +19,7 @@ const IncomeModal = ({ isVisible, onClose, onSave }) => {
  const [description, setDescription] = useState("");
  const [incomes, setIncomes] = useState([]);
 
+ 
  useEffect(() => {
    fetchIncomes();
  }, []);
