@@ -266,7 +266,7 @@ app.put("/transactions/:transactionID", (req, res) => {
 // Ruta para eliminar una transacción por su ID
 app.delete("/transactions/:transactionID", (req, res) => {
   const { transactionID } = req.params;
-  const query = `DELETE FROM transactions WHERE transactionID=${transactionID}`;
+  const query = `DELETE FROM transacciones WHERE transactionID=${transactionID}`;
   conexion.query(query, (error, resultado) => {
     if (error) return console.error(error.message);
     res.json("Transacción eliminada exitosamente");

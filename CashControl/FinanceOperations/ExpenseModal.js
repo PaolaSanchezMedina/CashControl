@@ -12,7 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "10.0.2.2";
 
 const ExpenseModal = ({ isVisible, onClose, onSave }) => {
   const [amount, setAmount] = useState("");
@@ -31,18 +31,18 @@ const ExpenseModal = ({ isVisible, onClose, onSave }) => {
       )
         .toString()
         .padStart(2, "0")}-${currentDate
-        .getDate()
-        .toString()
-        .padStart(2, "0")} ${currentDate
-        .getHours()
-        .toString()
-        .padStart(2, "0")}:${currentDate
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}:${currentDate
-        .getSeconds()
-        .toString()
-        .padStart(2, "0")}`;
+          .getDate()
+          .toString()
+          .padStart(2, "0")} ${currentDate
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${currentDate
+              .getMinutes()
+              .toString()
+              .padStart(2, "0")}:${currentDate
+                .getSeconds()
+                .toString()
+                .padStart(2, "0")}`;
 
       const expenseData = {
         userID: userId,
@@ -53,6 +53,7 @@ const ExpenseModal = ({ isVisible, onClose, onSave }) => {
         category: "Sin categoría",
         paymentMethod: "Son método",
       };
+
 
       // Crea la URL utilizando la variable para la dirección IP
       const apiUrl = `http://${ipAddress}:3000/transactions`;

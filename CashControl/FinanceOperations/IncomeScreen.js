@@ -7,7 +7,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "10.0.2.2";
 
 const IncomeScreen = () => {
   const navigation = useNavigation();
@@ -24,53 +24,61 @@ const IncomeScreen = () => {
 
   const saveIncome = async (incomeData) => {
     try {
-
-      // Crea la URL utilizando la variable para la dirección IP
       const userId = await AsyncStorage.getItem('@userId');
       const apiUrl = `http://${ipAddress}:3000/transactions?type=Income&userId=${userId}`;
       const response = await axios.post(apiUrl, incomeData);
-
       console.log("Respuesta del servidor:", response.data);
-
-      onClose(); // Cerrar el modal después de agregar la transacción
-      
-      // Actualizar la lista de transacciones después de cerrar el modal y guardar la transacción exitosamente
-      fetchIncomeTransactions(); // Llama a la función para obtener las transacciones actualizadas
+      onClose();
+      fetchIncomeTransactions();
     } catch (error) {
       console.error("Error al agregar ingreso:", error);
-      // Manejar errores, mostrar mensajes de error, etc.
+    }
+  };
+
+  const deleteTransaction = async (transactionID) => {
+    console.log(transactionID);
+    try {
+      const response = await axios.delete(`http://${ipAddress}:3000/transactions/${transactionID}`);
+      console.log("Transacción eliminada exitosamente:", response.data);
+    } catch (error) {
+      console.error("Error al eliminar transacción:", error);
     }
   };
 
   useEffect(() => {
-    async function fetchIncomeTransactions() {
+    const interval = setInterval(async () => {
       try {
         const userId = await AsyncStorage.getItem('@userId');
-        const response = await axios.get(`http://192.168.0.26:3000/transactions?type=Income&userId=${userId}`);
+        const response = await axios.get(`http://${ipAddress}:3000/transactions?type=Income&userId=${userId}`);
         setIncomeTransactions(response.data);
       } catch (error) {
         console.error("Error al obtener transacciones de ingresos:", error);
       }
-    }
-  
-    fetchIncomeTransactions();
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <View style={styles.generalContainer}>
       <Text style={{ fontSize: 30, textAlign: "center", marginTop: "20%" }}>
-        Todos mis ingresos
+        Mis Ingresos
       </Text>
 
       <View style={styles.container}>
-        <View style={styles.container}>
-          {incomeTransactions.map((transaction, index) => (
-            <View key={index} style={styles.transactionContainer}>
+        {incomeTransactions.map((transaction) => (
+          <View key={transaction.transactionID} style={styles.transactionContainer}>
+            <Text style={{color: 'black', opacity: 0}}>{transaction.TransactionID}</Text>
             <Text>{transaction.Description}</Text>
-              <Text>: ${transaction.Amount}</Text>
-            </View>
-          ))}
-        </View>
+            <Text>: ${transaction.Amount}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                deleteTransaction(transaction.TransactionID);
+              }}
+            >
+              <AntDesign name="delete" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        ))}
 
         <View style={styles.subContainer}>
           <Text
