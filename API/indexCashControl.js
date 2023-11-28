@@ -20,7 +20,7 @@ const conexion = mysql.createConnection({
   host: "localhost",
   database: "cashcontrol",
   user: "root",
-  password: "",
+  password: "1234",
 });
 
 app.listen(PUERTO, () => {
