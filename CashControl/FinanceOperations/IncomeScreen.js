@@ -82,15 +82,7 @@ const IncomeScreen = () => {
           >
             Agregar ingreso
           </Text>
-          {incomeTransactions.map((transaction, index) => (
-      <View key={index}>
-        <Text>Monto: {transaction.amount}</Text>
-        <Text>Descripción: {transaction.description}</Text>
-        <Text>Categoría: {transaction.category}</Text>
-        <Text>Método de pago: {transaction.paymentMethod}</Text>
-      </View>
-    ))}
-
+          
           <TouchableOpacity
             onPress={openModal}
             style={{
@@ -116,7 +108,17 @@ const IncomeScreen = () => {
         onClose={closeModal}
         onSave={saveIncome}
       />
+      {incomeTransactions.map((transaction, index) => (
+      <View key={index}>
+        <Text>Monto: {transaction.amount}</Text>
+        <Text>Descripción: {transaction.description}</Text>
+        <Text>Categoría: {transaction.category}</Text>
+        <Text>Método de pago: {transaction.paymentMethod}</Text>
+      </View>
+    ))}
+
     </View>
+    
   );
 };
 
