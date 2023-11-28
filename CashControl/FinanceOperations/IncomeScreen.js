@@ -61,7 +61,14 @@ const IncomeScreen = () => {
       <Text style={{ fontSize: 30, textAlign: "center", marginTop: "20%" }}>
         Todos mis ingresos
       </Text>
-
+      {incomeTransactions.map((transaction, index) => (
+       <View key={index}>
+         <Text>Monto: {transaction.amount}</Text>
+         <Text>Descripción: {transaction.description}</Text>
+         <Text>Categoría: {transaction.category}</Text>
+         <Text>Método de pago: {transaction.paymentMethod}</Text>
+       </View>
+     ))}
       <View style={styles.container}>
         <View style={styles.container}>
           {incomeTransactions.map((transaction, index) => (
@@ -99,14 +106,7 @@ const IncomeScreen = () => {
               <AntDesign name="pluscircleo" size={24} color="white" />
             </Text>
           </TouchableOpacity>
-          {incomeTransactions.map((transaction, index) => (
-       <View key={index}>
-         <Text>Monto: {transaction.amount}</Text>
-         <Text>Descripción: {transaction.description}</Text>
-         <Text>Categoría: {transaction.category}</Text>
-         <Text>Método de pago: {transaction.paymentMethod}</Text>
-       </View>
-     ))}
+          
         </View>
       </View>
 
