@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  Alert,
+ View,
+ Text,
+ TextInput,
+ StyleSheet,
+ Modal,
+ TouchableOpacity,
+ Alert,
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,9 +15,33 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const ipAddress = "10.0.2.2";
 
 const IncomeModal = ({ isVisible, onClose, onSave }) => {
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+ const [amount, setAmount] = useState("");
+ const [description, setDescription] = useState("");
+ const [incomes, setIncomes] = useState([]);
 
+ 
+ useEffect(() => {
+   fetchIncomes();
+ }, []);
+
+ const fetchIncomes = async () => {
+   try {
+     // Obtener el ID del usuario guardado en AsyncStorage
+     const userId = await AsyncStorage.getItem("@userId");
+
+     // Crea la URL utilizando la variable para la dirección IP
+     const apiUrl = `http://${ipAddress}:3000/transactions?type=Income&userId=${userId}`;
+     const response = await axios.get(apiUrl);
+
+     console.log("Respuesta del servidor:", response.data);
+
+     // Guardar los ingresos en el estado
+     setIncomes(response.data);
+   } catch (error) {
+     console.error("Error al obtener ingresos:", error);
+     // Manejar errores, mostrar mensajes de error, etc.
+   }
+ };
   const handleSave = async () => {
     try {
       // Obtener el ID del usuario guardado en AsyncStorage
@@ -112,6 +136,14 @@ const IncomeModal = ({ isVisible, onClose, onSave }) => {
             <TouchableOpacity onPress={onClose} style={styles.button}>
               <Text style={styles.buttonText}>Cerrar</Text>
             </TouchableOpacity>
+            {incomes.map((income, index) => (
+       <View key={index}>
+         <Text>Monto: {income.amount}</Text>
+         <Text>Descripción: {income.description}</Text>
+         <Text>Categoría: {income.category}</Text>
+         <Text>Método de pago: {income.paymentMethod}</Text>
+       </View>
+     ))}
           </View>
         </View>
       </View>
