@@ -45,7 +45,7 @@ const IncomeScreen = () => {
     async function fetchIncomeTransactions() {
       try {
         const userId = await AsyncStorage.getItem('@userId');
-        const response = await axios.get(`http://192.168.0.26:3000/transactions?type=Income&userId=${userId}`);
+        const response = await axios.get(`http://${ipAddress}:3000/transactions?type=Income&userId=${userId}`);
         setIncomeTransactions(response.data);
       } catch (error) {
         console.error("Error al obtener transacciones de ingresos:", error);
