@@ -7,8 +7,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
-
+const ipAddress = "10.0.2.2";
 const IncomeScreen = () => {
  const navigation = useNavigation();
  const [isModalVisible, setModalVisible] = useState(false);
@@ -61,14 +60,7 @@ const IncomeScreen = () => {
       <Text style={{ fontSize: 30, textAlign: "center", marginTop: "20%" }}>
         Todos mis ingresos
       </Text>
-      {incomeTransactions.map((transaction, index) => (
-       <View key={index}>
-         <Text>Monto: {transaction.amount}</Text>
-         <Text>Descripción: {transaction.description}</Text>
-         <Text>Categoría: {transaction.category}</Text>
-         <Text>Método de pago: {transaction.paymentMethod}</Text>
-       </View>
-     ))}
+     
       <View style={styles.container}>
         <View style={styles.container}>
           {incomeTransactions.map((transaction, index) => (
@@ -90,6 +82,15 @@ const IncomeScreen = () => {
           >
             Agregar ingreso
           </Text>
+          {incomeTransactions.map((transaction, index) => (
+      <View key={index}>
+        <Text>Monto: {transaction.amount}</Text>
+        <Text>Descripción: {transaction.description}</Text>
+        <Text>Categoría: {transaction.category}</Text>
+        <Text>Método de pago: {transaction.paymentMethod}</Text>
+      </View>
+    ))}
+
           <TouchableOpacity
             onPress={openModal}
             style={{
