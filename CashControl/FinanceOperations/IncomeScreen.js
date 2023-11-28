@@ -10,17 +10,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const ipAddress = "192.168.0.26";
 
 const IncomeScreen = () => {
-  const navigation = useNavigation();
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [incomeTransactions, setIncomeTransactions] = useState([]);
+ const navigation = useNavigation();
+ const [isModalVisible, setModalVisible] = useState(false);
+ const [incomeTransactions, setIncomeTransactions] = useState([]);
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
+ const openModal = () => {
+   setModalVisible(true);
+ };
 
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+ const closeModal = () => {
+   setModalVisible(false);
+ };
 
   const saveIncome = async (incomeData) => {
     try {
@@ -99,6 +99,14 @@ const IncomeScreen = () => {
               <AntDesign name="pluscircleo" size={24} color="white" />
             </Text>
           </TouchableOpacity>
+          {incomeTransactions.map((transaction, index) => (
+       <View key={index}>
+         <Text>Monto: {transaction.amount}</Text>
+         <Text>Descripción: {transaction.description}</Text>
+         <Text>Categoría: {transaction.category}</Text>
+         <Text>Método de pago: {transaction.paymentMethod}</Text>
+       </View>
+     ))}
         </View>
       </View>
 
