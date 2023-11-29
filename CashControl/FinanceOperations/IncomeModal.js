@@ -70,7 +70,7 @@ const IncomeModal = ({ isVisible, onClose, onSave }) => {
   };
 
   const showAlert = (data) => {
-    if (data === "Transacción creada exitosamente") {
+    if (data === "Transacción creada y resumen de gastos actualizado exitosamente") {
       Alert.alert(
         "Transacción Exitosa",
         "La transacción se creó exitosamente.",

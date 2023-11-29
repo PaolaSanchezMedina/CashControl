@@ -206,9 +206,48 @@ app.post("/transactions", (req, res) => {
     if (error) {
       return res.status(500).json({ error: "Error al crear la transacción" });
     }
-    res.json("Transacción creada exitosamente");
+
+    // Verificar si existe un registro en 'resumengastos' para el usuario actual
+    const summaryQuery = "SELECT * FROM resumengastos WHERE userID = ?";
+    conexion.query(summaryQuery, [transaction.userID], (error, summaryResult) => {
+      if (error) {
+        return res.status(500).json({ error: "Error al verificar el resumen de gastos" });
+      }
+
+      // Si existe un registro, actualizarlo
+      if (summaryResult.length > 0) {
+        const updateSummaryQuery = `UPDATE resumengastos SET 
+        ${transaction.transactionType === 'Income' ? 'TotalIncome = TotalIncome + ?' : 'TotalExpenses = TotalExpenses + ?'}, 
+        TotalBalance = TotalIncome - TotalExpenses 
+        WHERE userID = ?`;
+        conexion.query(updateSummaryQuery, [transaction.amount, transaction.userID], (error, updateResult) => {
+          if (error) {
+            return res.status(500).json({ error: "Error al actualizar el resumen de gastos" });
+          }
+          res.json("Transacción creada y resumen de gastos actualizado exitosamente");
+        });
+      }
+      // Si no existe un registro, insertar uno nuevo
+      else {
+        const newSummary = {
+          userID: transaction.userID,
+          totalBalance: transaction.transactionType === 'Income' ? transaction.amount : -transaction.amount,
+          totalIncome: transaction.transactionType === 'Income' ? transaction.amount : 0,
+          totalExpenses: transaction.transactionType === 'Expense' ? transaction.amount : 0,
+        };
+        const insertSummaryQuery = "INSERT INTO resumengastos SET ?";
+        conexion.query(insertSummaryQuery, newSummary, (error, insertResult) => {
+          if (error) {
+            return res.status(500).json({ error: "Error al insertar el resumen de gastos" });
+          }
+          res.json("Transacción creada y resumen de gastos insertado exitosamente");
+        });
+      }
+    });
   });
 });
+
+
 
 // Ruta para obtener transacciones filtradas por tipo
 app.get('/transactions', (req, res) => {
@@ -228,6 +267,23 @@ app.get('/transactions', (req, res) => {
   });
 });
 
+// Obtener todas las transacciones de un usuario en especifico
+app.get("/transactions/user/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'Faltan parámetros en la solicitud' });
+  }
+
+  const query = 'SELECT * FROM transacciones WHERE userID = ?';
+  conexion.query(query, [userId], (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Error al obtener transacciones' });
+    }
+
+    res.json(results);
+  });
+});
 
 // Ruta para obtener una transacción por su ID
 app.get("/transactions/:transactionID", (req, res) => {
@@ -266,12 +322,38 @@ app.put("/transactions/:transactionID", (req, res) => {
 // Ruta para eliminar una transacción por su ID
 app.delete("/transactions/:transactionID", (req, res) => {
   const { transactionID } = req.params;
-  const query = `DELETE FROM transacciones WHERE transactionID=${transactionID}`;
-  conexion.query(query, (error, resultado) => {
-    if (error) return console.error(error.message);
-    res.json("Transacción eliminada exitosamente");
+  const transactionQuery = `SELECT * FROM transacciones WHERE transactionID=${transactionID}`;
+  conexion.query(transactionQuery, (error, transactionResult) => {
+    if (error) {
+      return res.status(500).json({ error: "Error al obtener la transacción" });
+    }
+ 
+    const transaction = transactionResult[0];
+    const updateSummaryQuery = `UPDATE resumengastos SET 
+    ${transaction.TransactionType === 'Income' ? 'TotalIncome = TotalIncome - ?' : 'TotalExpenses = TotalExpenses - ?'}, 
+    TotalBalance = TotalIncome - TotalExpenses 
+    WHERE UserID = ?`;
+    console.log(updateSummaryQuery);
+    conexion.query(updateSummaryQuery, [transaction.Amount, transaction.UserID], (error, updateResult) => {
+      console.log(updateSummaryQuery);
+      console.log(transaction.Amount);
+      console.log(transaction.UserID);
+      if (error) {
+        return res.status(500).json({ error: "Error al actualizar el resumen de gastos" });
+      }
+ 
+      const deleteQuery = `DELETE FROM transacciones WHERE transactionID=${transactionID}`;
+      conexion.query(deleteQuery, (error, deleteResult) => {
+        if (error) {
+          return res.status(500).json({ error: "Error al eliminar la transacción" });
+        }
+        res.json("Transacción eliminada exitosamente");
+      });
+    });
   });
-});
+ });
+ 
+
 
 //CATEGORIES---------------------
 // Ruta para obtener todas las categorías
@@ -344,7 +426,7 @@ app.delete("/categories/:categoryID", (req, res) => {
 // Ruta para obtener un resumen financiero específico por su ID
 app.get("/summary/:summaryID", (req, res) => {
   const { summaryID } = req.params;
-  const query = `SELECT * FROM summary WHERE summaryID='${summaryID}'`;
+  const query = `SELECT * FROM resumengastos WHERE SummaryID='${summaryID}'`;
   conexion.query(query, (error, resultado) => {
     if (error) return console.error(error.message);
     if (resultado.length > 0) {
@@ -358,7 +440,7 @@ app.get("/summary/:summaryID", (req, res) => {
 // Ruta para obtener el resumen financiero de un usuario específico
 app.get("/summary/user/:userID", (req, res) => {
   const { userID } = req.params;
-  const query = `SELECT * FROM summary WHERE userID='${userID}'`;
+  const query = `SELECT * FROM resumengastos WHERE userID='${userID}'`;
   conexion.query(query, (error, resultado) => {
     if (error) return console.error(error.message);
     if (resultado.length > 0) {
@@ -377,7 +459,7 @@ app.post("/summary", (req, res) => {
     totalExpenses: req.body.totalExpenses,
     summaryDate: req.body.summaryDate,
   };
-  const query = "INSERT INTO summary SET ?";
+  const query = "INSERT INTO resumengastos SET ?";
   conexion.query(query, newSummary, (error, resultado) => {
     if (error) return console.error(error.message);
     res.json("Resumen financiero creado exitosamente");
@@ -393,7 +475,7 @@ app.put("/summary/:summaryID", (req, res) => {
     summaryDate: req.body.summaryDate,
   };
 
-  const query = `UPDATE summary SET ? WHERE summaryID='${summaryID}'`;
+  const query = `UPDATE resumengastos SET ? WHERE SummaryID='${summaryID}'`;
   conexion.query(query, updatedSummary, (error, resultado) => {
     if (error) return console.error(error.message);
     res.json("Resumen financiero actualizado exitosamente");
@@ -403,7 +485,7 @@ app.put("/summary/:summaryID", (req, res) => {
 // Ruta para eliminar un resumen financiero por su ID
 app.delete("/summary/:summaryID", (req, res) => {
   const { summaryID } = req.params;
-  const query = `DELETE FROM summary WHERE summaryID='${summaryID}'`;
+  const query = `DELETE FROM resumengastos WHERE SummaryID='${summaryID}'`;
   conexion.query(query, (error, resultado) => {
     if (error) return console.error(error.message);
     res.json("Resumen financiero eliminado exitosamente");

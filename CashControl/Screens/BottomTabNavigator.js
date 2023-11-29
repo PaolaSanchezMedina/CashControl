@@ -57,7 +57,7 @@ const BottomTabNavigator = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Transacciones',
-          tabBarIcon: ({ color, size }) => (<Ionicons name="add" size={24} color={color} />),
+          tabBarIcon: ({ color, size }) => (<Ionicons name="add" size={24} color="black" />),
         }}
       />
       {/* Define la cuarta pestaña ('Settings') con sus opciones */}
