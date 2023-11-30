@@ -12,7 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "10.0.2.2";
 
 const IncomeModal = ({ isVisible, onClose, onSave }) => {
   const [amount, setAmount] = useState("");
@@ -70,7 +70,7 @@ const IncomeModal = ({ isVisible, onClose, onSave }) => {
   };
 
   const showAlert = (data) => {
-    if (data === "Transacción creada exitosamente") {
+    if (data === "Transacción creada y resumen de gastos actualizado exitosamente") {
       Alert.alert(
         "Transacción Exitosa",
         "La transacción se creó exitosamente.",

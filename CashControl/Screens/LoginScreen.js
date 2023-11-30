@@ -12,7 +12,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define la dirección IP en una variable
-const ipAddress = "192.168.0.26";
+const ipAddress = "10.0.2.2";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -30,19 +30,25 @@ const LoginScreen = () => {
   };
 
   // Función para manejar el inicio de sesión
-  const handleLogin = async () => {
-    try {
-      const userData = {
-        username: username,
-        password: password,
-      };
+const handleLogin = async () => {
+  try {
+    const userData = {
+      username: username,
+      password: password,
+    };
 
-      // Crea la URL utilizando la variable para la dirección IP
-      const apiUrl = `http://${ipAddress}:3000/login`;
+    // Verifica datos de inicio de sesión
+    console.log("Datos de inicio de sesión:", userData);
+
+    // Crea la URL utilizando la variable para la dirección IP
+    const apiUrl = `http://${ipAddress}:3000/login`;
+
+    try {
+      // Realiza la solicitud Axios
       const response = await axios.post(apiUrl, userData);
 
-      // Imprimir la respuesta del servidor para verificar la estructura
-      console.log("Respuesta del servidor:", response.data);
+      // Imprime la respuesta completa del servidor para verificar la estructura
+      console.log("Respuesta completa del servidor:", response);
 
       if (response.data.token && response.data.userID) {
         console.log("Token recibido:", response.data.token);
@@ -60,9 +66,22 @@ const LoginScreen = () => {
         toggleModal("No se recibió el token o el ID de usuario del servidor");
       }
     } catch (error) {
-      toggleModal("Error de autenticación:", error.message);
+      console.error("Error al realizar la solicitud:", error);
+
+      // Manejar error específico de autenticación
+      if (error.response && error.response.status === 401) {
+        toggleModal("Credenciales inválidas");
+      } else {
+        toggleModal("Error de autenticación:", error.message);
+      }
     }
-  };
+
+  } catch (error) {
+    console.error("Error general:", error);
+    toggleModal("Error general:", error.message);
+  }
+};
+
 
   return (
     <View style={styles.container}>
